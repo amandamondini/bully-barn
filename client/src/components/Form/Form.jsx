@@ -12,6 +12,7 @@ const Form = () => {
         },
         petPreferences: {
             distanceWillingToTravel: "",
+            dogId: "",
         },
         employmentInformation: {
             currentEmploymentStatus: "",

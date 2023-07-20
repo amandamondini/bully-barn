@@ -13,6 +13,7 @@ const renderNav = (Component) => {
             {/* <Nav /> */}
             {/* <Component /> */}
             <AdminDash />
+            <Form />
         </>
     );
 };
