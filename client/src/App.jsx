@@ -10,8 +10,8 @@ import AdminDash from "./components/Admin-Dash/Admin-Dash";
 const renderNav = (Component) => {
     return (
         <>
-            {/* <Nav /> */}
-            {/* <Component /> */}
+            <Nav />
+            <Component />
             <AdminDash />
             <Form />
         </>

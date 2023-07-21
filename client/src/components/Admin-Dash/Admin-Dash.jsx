@@ -6,7 +6,6 @@ const ApplicationsTable = () => {
     const [selectedApplication, setSelectedApplication] = useState(null);
 
     useEffect(() => {
-        // Fetch applications from the backend API
         fetch("http://localhost:4000/form/applications")
             .then((response) => response.json())
             .then((data) => {
