@@ -63,7 +63,7 @@ body {
     border: none;
     color: #007bff;
     cursor: pointer;
-    padding: .5em;
+    padding: 0.5em;
     margin: 0;
 }
 
@@ -84,7 +84,7 @@ body {
 
 .login-container #forgot-pwd-link {
     text-decoration: none;
-    font-size: .9em;
+    font-size: 0.9em;
     color: #000000;
     margin-left: 10.6em;
 }
@@ -95,7 +95,7 @@ body {
 }
 
 .login-container #password-input {
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
 }
 
 #reset-info {
