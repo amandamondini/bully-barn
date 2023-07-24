@@ -3,9 +3,11 @@ import "./Admin-Dash.css";
 
 const ApplicationsTable = () => {
     const [applications, setApplications] = useState([]);
+    const [dogs, setDogs] = useState([]);
     const [selectedApplication, setSelectedApplication] = useState(null);
 
     useEffect(() => {
+        // Fetch applications data
         fetch("http://localhost:4000/form/applications")
             .then((response) => response.json())
             .then((data) => {
@@ -14,26 +16,54 @@ const ApplicationsTable = () => {
             .catch((error) => {
                 console.error(error);
             });
+
+        // Fetch dogs data
+        fetch("http://localhost:4000/dog")
+            .then((response) => response.json())
+            .then((data) => {
+                setDogs(data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }, []);
+
+    // Function to find the dog object based on dogId
+    const findDogById = (dogId) => {
+        return dogs.find((dog) => dog._id === dogId);
+    };
 
     const handleApplicationClick = (application) => {
         setSelectedApplication(application);
+        console.log("Selected Dog ID:", application.petPreferences.dogId);
     };
 
     return (
         <div>
             <h2>Applications List</h2>
             <ul>
-                {applications.map((application) => (
-                    <li
-                        key={application._id}
-                        onClick={() => handleApplicationClick(application)}
-                        style={{ cursor: "pointer" }}
-                    >
-                        {application.personalInformation.fullName}
-                    </li>
-                ))}
+                {applications.map((application) => {
+                    const dog = findDogById(application.petPreferences.dogId);
+                    return (
+                        <li
+                            key={application._id}
+                            onClick={() => handleApplicationClick(application)}
+                            style={{ cursor: "pointer" }}
+                        >
+                            {application.personalInformation.fullName}
+                            {dog && (
+                                <span style={{ marginLeft: "5px" }}>
+                                    (Caseworker: {dog.caseworker}, Adoption
+                                    Status: {dog.adoptionStatus}, Sponsorship
+                                    Status:{" "}
+                                    {dog.sponsorshipStatus ? "Yes" : "No"})
+                                </span>
+                            )}
+                        </li>
+                    );
+                })}
             </ul>
+
             {selectedApplication && (
                 <div>
                     <h2>Selected Application Details</h2>
