@@ -357,7 +357,6 @@ function AddDog() {
                 </RadioGroup>
             </FormControl>
 
-
             <FormControl component='fieldset'>
                 <FormLabel>Object Aggression*</FormLabel>
                 <RadioGroup
@@ -495,7 +494,6 @@ function AddDog() {
                 required
                 onChange={handleChange}
             />  
-
 
             <TextField
                 className='form-input'
