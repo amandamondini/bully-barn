@@ -112,7 +112,6 @@ function AddDog() {
         formData.append('croppedImage', dogData.croppedImage)
 
 
-
         try{
             const response = await fetch(url, {
                 method: 'POST',
