@@ -40,6 +40,7 @@ function Dog() {
       });
 
       const data = await response.json();
+      console.log(data)
       setDogs(data);
     };
 
@@ -130,10 +131,25 @@ function Dog() {
    setFilteredDogs(filtered)
   }, [dogs, filters])
 
+  const bannerSwitch = (dog) => {
+    if (dog.adoptionStatus === 'pending') return 'pending-card'
+    if (dog.adoptionStatus === 'adopted') return 'adopted-card'
+    if (dog.sponsorshipStatus) return 'sponsored-card' 
+    return false
+  }
+
+  const displayBanner = (dog) => {
+    if (dog.adoptionStatus === "pending") return 'PENDING'
+    if (dog.adoptionStatus === 'adopted') return 'ADOPTED'
+    if (dog.sponsorshipStatus) return 'SPONSORED!' 
+  }
+  
+
   const displayDogs = () => {
     return (
       dogs && filteredDogs.map((dog) => ( 
-        <div id='dog-card' key={dog._id} onClick={() => displayDogDetails(dog)}>
+        <div id='dog-card' className={bannerSwitch(dog)} key={dog._id} onClick={() => displayDogDetails(dog)}>
+          {bannerSwitch(dog) && <div id={`head-${bannerSwitch(dog)}`}>{displayBanner(dog)}</div>}
           <div id='img-container'>
             <img src={dog.image} alt={dog.name} />
           </div>
@@ -272,7 +288,7 @@ function Dog() {
                     value='{"minWeight": 1, "maxWeight": 10}'
                   />
                 }
-                label="5-10 lbs"
+                label="1-10 lbs"
               />
               <FormControlLabel
                 control={
