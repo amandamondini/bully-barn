@@ -118,6 +118,8 @@ const LoginComponent = () => {
     };
 
     return (
+        <>
+        <Link to={'/'}><img className="barn-logo" src='https://freesvg.org/img/1401952018.png' /></Link>
         <div className="auth-container">
         <div className="login-container">
             {isLoggedIn ? (
@@ -170,7 +172,7 @@ const LoginComponent = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                        { isLoginMode && <Link to={'/forgot-password'}>Forgot Password?</Link>}
+                        { isLoginMode && <Link id="forgot-pwd-link" to={'/forgot-password'}>Forgot Password?</Link>}
                     </div>
                     {error && <div className="error-message">{error}</div>}
                     {isLoginMode ? (
@@ -205,6 +207,7 @@ const LoginComponent = () => {
             )}
         </div>
         </div>
+        </>
     );
 };
 
