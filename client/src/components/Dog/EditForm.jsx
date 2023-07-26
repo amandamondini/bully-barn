@@ -13,7 +13,6 @@ function EditForm({selectedDog, handleUpdate}) {
     const [editedDog, setEditedDog] = useState({
         adoptionStatus: 'available',
         energyLevel: 'Low',
-        intakeDate: new Date().toISOString().substring(0,10) // set today's date as default value
         
     })
 
@@ -29,7 +28,6 @@ function EditForm({selectedDog, handleUpdate}) {
         .then(res => res.json())
         .then(data => {
             setEditedDog(data)
-            console.log(data.intakeDate)
         })
         .catch(err => {
             console.log(err)
