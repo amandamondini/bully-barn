@@ -20,6 +20,7 @@ function Dog() {
     '{"gender": "Male"}': 'Male',
     '{"gender": "Female"}': 'Female',
     '{"goodwKid": true}': 'Kid Friendly',
+    '{"minAge": 0, "maxAge": 0.9999}': '<1 yr',
     '{"minAge": 3, "maxAge": 5}': '3-5 years old',
     '{"minAge": 1, "maxAge": 2}': '1-2 years old',
     '{"minAge": 6, "maxAge": 10}': '6-10 years old',
@@ -57,6 +58,22 @@ function Dog() {
     setSelectedDog(null);
   }
 
+  const handleDonateClick = async () => {
+    try {
+      const response = await fetch('http://localhost:4000/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fee: selectedDog.adoptionFee }), // Send the selected dog's adoption fee to the backend
+      });
+      const session = await response.json();
+      window.location = session.url; // Redirect to the Stripe checkout page
+    } catch (error) {
+      console.error('Error initiating payment:', error);
+    }
+  };
+
   const renderGenderIcon = (gender) => {
     return gender === "Female" ? <FemaleIcon /> : <MaleIcon />
   }
@@ -70,44 +87,55 @@ function Dog() {
           <div id='button-container'>
             <button onClick={handleBackToAllDogs} id='back-to-all-dogs-btn'>Back</button>
           </div>
+          
           <div id='dog-details-container'>
             <div id='img-dog-container'>
               <img src={selectedDog.image} alt={selectedDog.name} />
             </div>
-            <div id='dog-details'>
-              <h1>{selectedDog.name}</h1>
-              <section id='basic-info'>
-                <p>Age {selectedDog.age}</p>
-                <div id='dog-gender'>
-                  {renderGenderIcon(selectedDog.gender)}
-                  <p>{selectedDog.gender}</p>
+            <div id='dog-details-and-adoption'>
+              <div id='dog-details'>
+                <h1>{selectedDog.name}</h1>
+                <section id='basic-info'>
+                  <p>Age {selectedDog.age}</p>
+                  <div id='dog-gender'>
+                    {renderGenderIcon(selectedDog.gender)}
+                    <p>{selectedDog.gender}</p>
+                  </div>
+                </section>
+                <section id='additional-info'>
+                  <p>Bio: <span>{selectedDog.bio}</span></p>
+                  <p>Energy Level: <span>{selectedDog.energyLevel}</span></p>
+                  <div>
+                    <h4>Family-Friendly Traits</h4>
+                    <p>Other dogs: <span>{selectedDog.goodwDog ? 'yes' : '-'}</span></p>
+                    <p>Cats: <span>{selectedDog.goodwCat ? 'yes' : '-'}</span></p>
+                    <p>Children: <span>{selectedDog.goodwKid ? 'yes' : '-'}</span></p>
+                  </div>
+                  <div>
+                    <h4>Training and Behavior</h4>
+                    <p>Crate Trained: <span>{selectedDog.crateTrained ? 'yes' : 'No'}</span></p>
+                    <p>House Trained: <span>{selectedDog.houseTrained ? 'yes' : 'No'}</span></p>
+                    <p>Reactivity to Objects: <span>{selectedDog.objAggression ? 'yes' : 'No'}</span></p>
+                  </div>
+                  <div>
+                    <h4>Special Needs</h4>
+                    <p><span>{selectedDog.specialNeeds}</span></p>
+                    <p><span>{selectedDog.specialNeedsDesc}</span></p>
+                    <h4>Medication:</h4>
+                    <p><span>{selectedDog.medication}</span></p>
+                  </div>
+                  <h4>Adoption Fee <span>{selectedDog.adoptionFee}</span></h4>
+                </section>
+              </div>
+              <div id='adoptionStatus-and-payments'>
+                <p>Available{selectedDog.adoptionSatus}</p>
+                <div id='payments'>
+                  <button onClick={handleDonateClick} className='donate-btn'>Adoption Fee</button>
+                  <button onClick={handleDonateClick} className='donate-btn'>Sponsor</button>
                 </div>
-              </section>
-              <section id='additional-info'>
-                <p>Bio: <span>{selectedDog.bio}</span></p>
-                <p>Energy Level: <span>{selectedDog.energyLevel}</span></p>
-                <div>
-                  <h4>Family-Friendly Traits</h4>
-                  <p>Other dogs: <span>{selectedDog.goodwDog ? 'yes' : '-'}</span></p>
-                  <p>Cats: <span>{selectedDog.goodwCat ? 'yes' : '-'}</span></p>
-                  <p>Children: <span>{selectedDog.goodwKid ? 'yes' : '-'}</span></p>
-                </div>
-                <div>
-                  <h4>Training and Behavior</h4>
-                  <p>Crate Trained: <span>{selectedDog.crateTrained ? 'yes' : 'No'}</span></p>
-                  <p>House Trained: <span>{selectedDog.houseTrained ? 'yes' : 'No'}</span></p>
-                  <p>Reactivity to Objects: <span>{selectedDog.objAggression ? 'yes' : 'No'}</span></p>
-                </div>
-                <div>
-                  <h4>Special Needs</h4>
-                  <p><span>{selectedDog.specialNeeds}</span></p>
-                  <p><span>{selectedDog.specialNeedsDesc}</span></p>
-                  <h4>Medication:</h4>
-                  <p><span>{selectedDog.medication}</span></p>
-                </div>
-                <h4>Adoption Fee <span>{selectedDog.adoptionFee}</span></h4>
-              </section>
+              </div>
             </div>
+
           </div>
           
         </div>
@@ -121,7 +149,7 @@ function Dog() {
     const filtered = dogs && dogs.filter((dog) => {
       return filters.every((filter) => {
         const filterObj = JSON.parse(filter) // Turns the string into an object
-        if (filterObj.minAge && filterObj.maxAge) {
+        if (filterObj.hasOwnProperty('minAge') && filterObj.hasOwnProperty('maxAge')) {
           // Handle age range filters
           return dog.age >= filterObj.minAge && dog.age <= filterObj.maxAge
         } else if (filterObj.minWeight && filterObj.maxWeight) {
@@ -133,14 +161,14 @@ function Dog() {
       })
     })
 
-   setFilteredDogs(filtered)
+    setFilteredDogs(filtered)
   }, [dogs, filters])
 
   const bannerSwitch = (dog) => {
     if (dog.adoptionStatus === 'pending') return 'pending-card'
     if (dog.adoptionStatus === 'adopted') return 'adopted-card'
     if (dog.sponsorshipStatus) return 'sponsored-card' 
-    return false
+    return undefined
   }
 
   const displayBanner = (dog) => {
@@ -206,20 +234,20 @@ function Dog() {
   }
 
   const displayFilters = () => {
-      return (
-        <div>
-          {/* Filter Dropdown */}
-          <IconButton onClick={handleMenuClick}>
+    return (
+      <div>
+        {/* Filter Dropdown */}
+        <IconButton onClick={handleMenuClick}>
           <FilterListIcon />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-          >
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
 
           {/* Gender: ------------------------------------------------ */}
-            <MenuItem>
+          <MenuItem>
             <div className='attr-label'>Gender:</div>
             {/* Female */}
             <FormControlLabel
@@ -238,52 +266,63 @@ function Dog() {
           </MenuItem>
 
           {/* Age: ------------------------------------------------ */}
-            <MenuItem>
+          <MenuItem>
             <div className='attr-label'>Age:</div>
+
             <FormControlLabel
                 control={
                   <Checkbox
-                    checked={filters.includes('{"minAge": 1, "maxAge": 2}')}
+                    checked={filters.includes('{"minAge": 0, "maxAge": 0.9999}')}
                     onChange={handleFilterChange}
-                    value='{"minAge": 1, "maxAge": 2}'
+                    value='{"minAge": 0, "maxAge": 0.9999}'
                   />
                 }
-                label="1-2 yrs"
+                label="<1 yr"
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={filters.includes('{"minAge": 3, "maxAge": 5}')}
-                    onChange={handleFilterChange}
-                    value='{"minAge": 3, "maxAge": 5}'
-                  />
-                }
-                label="3-5 yrs"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={filters.includes('{"minAge": 6, "maxAge": 10}')}
-                    onChange={handleFilterChange}
-                    value='{"minAge": 6, "maxAge": 10}'
-                  />
-                }
-                label="6-10 yrs"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={filters.includes('{"minAge": 11, "maxAge": 50}')}
-                    onChange={handleFilterChange}
-                    value='{"minAge": 11, "maxAge": 50}'
-                  />
-                }
-                label="11+ yrs"
-              />
-            </MenuItem>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={filters.includes('{"minAge": 1, "maxAge": 2}')}
+                  onChange={handleFilterChange}
+                  value='{"minAge": 1, "maxAge": 2}'
+                />
+              }
+              label="1-2 yrs"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={filters.includes('{"minAge": 3, "maxAge": 5}')}
+                  onChange={handleFilterChange}
+                  value='{"minAge": 3, "maxAge": 5}'
+                />
+              }
+              label="3-5 yrs"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={filters.includes('{"minAge": 6, "maxAge": 10}')}
+                  onChange={handleFilterChange}
+                  value='{"minAge": 6, "maxAge": 10}'
+                />
+              }
+              label="6-10 yrs"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={filters.includes('{"minAge": 11, "maxAge": 50}')}
+                  onChange={handleFilterChange}
+                  value='{"minAge": 11, "maxAge": 50}'
+                />
+              }
+              label="11+ yrs"
+            />
+          </MenuItem>
 
-            {/* Weight: ------------------------------------------------ */}
-            <MenuItem>
+          {/* Weight: ------------------------------------------------ */}
+          <MenuItem>
             <div className='attr-label'>Weight:</div>
             <FormControlLabel
                 control={
@@ -337,33 +376,33 @@ function Dog() {
               />
             </MenuItem>
 
-            {/* Friendly With: ------------------------------------------------ */}
-            <MenuItem>
+          {/* Friendly With: ------------------------------------------------ */}
+          <MenuItem>
             <div className='attr-label'>Friendly With:</div>
-              <FormControlLabel
-                control={<Checkbox checked={filters.includes('{"goodwCat": true}')} />}
-                label="Cats"
-                value='{"goodwCat": true}'
-                onChange={handleFilterChange}
-              />
-            
-              <FormControlLabel
-                control={<Checkbox checked={filters.includes('{"goodwDog": true}')} />}
-                label="Dogs"
-                value='{"goodwDog": true}'
-                onChange={handleFilterChange}
-              />
-          
-              <FormControlLabel
-                control={<Checkbox checked={filters.includes('{"goodwKid": true}')} />}
-                label="Kids"
-                value='{"goodwKid": true}'
-                onChange={handleFilterChange}
-              />
-            </MenuItem>
-          </Menu>
-        </div>
-      )
+            <FormControlLabel
+              control={<Checkbox checked={filters.includes('{"goodwCat": true}')} />}
+              label="Cats"
+              value='{"goodwCat": true}'
+              onChange={handleFilterChange}
+            />
+
+            <FormControlLabel
+              control={<Checkbox checked={filters.includes('{"goodwDog": true}')} />}
+              label="Dogs"
+              value='{"goodwDog": true}'
+              onChange={handleFilterChange}
+            />
+
+            <FormControlLabel
+              control={<Checkbox checked={filters.includes('{"goodwKid": true}')} />}
+              label="Kids"
+              value='{"goodwKid": true}'
+              onChange={handleFilterChange}
+            />
+          </MenuItem>
+        </Menu>
+      </div>
+    )
   }
 
   return (
@@ -377,7 +416,7 @@ function Dog() {
           <div id='dog-container'>
             {selectedDog && renderDogDetails()}
           {!selectedDog && displayDogs()}
-          </div>
+        </div>
       </div>
       
     </>
