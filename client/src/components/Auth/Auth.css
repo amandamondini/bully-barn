@@ -10,9 +10,6 @@ body {
 }
 
 .auth-container {
-}
-
-.auth-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,6 +20,7 @@ body {
     background-color: #fff;
     box-shadow: 0 0px 4px rgba(0, 0, 0, 0.5);
     padding: 20px;
+    margin-bottom: 5em;
     max-width: 320px;
     width: 100%;
 }
@@ -96,6 +94,15 @@ body {
 
 .login-container #password-input {
     margin-bottom: 0.5em;
+}
+
+.barn-logo {
+    max-width: 6em;
+    margin: 1.5em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
 }
 
 #reset-info {

@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const Dog = require("../models/Dog");
 const multer = require("multer");
-const multerS3 = require("multer-s3");
 const AWS = require("aws-sdk");
 
 const s3 = new AWS.S3({
@@ -10,8 +9,19 @@ const s3 = new AWS.S3({
     region: process.env.AWS_REGION,
 });
 
+const imageFilter = (req, file, cb) => {
+    if (!file.originalname.match(/\.(jpg|jpeg)$/)) {
+        return cb(new Error("Only JPG files are allowed"), false);
+    }
+    cb(null, true);
+};
+
 const upload = multer({
     storage: multer.memoryStorage(),
+    fileFilter: imageFilter,
+    limits: {
+        fileSize: 4 * 1024 * 1024, //4MB
+    },
 });
 
 //POST a new dog
@@ -51,10 +61,22 @@ router.post("/create", upload.single("image"), async (req, res) => {
             ContentType: req.file.mimetype,
         };
 
+        const croppedImageS3Params = {
+            Bucket: process.env.S3_BUCKET_NAME,
+            Key: `cropped_${Date.now()} ${req.file.originalname}`,
+            Body: Buffer.from(croppedImageBase64, "base64"),
+            acl: "public-read",
+            ContentType: req.file.mimetype,
+        };
+
         const data = await s3.upload(s3Params).promise();
+        const croppedImageData = await s3
+            .upload(croppedImageS3Params)
+            .promise();
 
         const newDog = new Dog({
             image: data.Location,
+            croppedImage: croppedImageData.Location,
             name,
             age,
             bio,
@@ -78,8 +100,6 @@ router.post("/create", upload.single("image"), async (req, res) => {
             intakeDate,
             adoptionFee,
         });
-
-        console.log(newDog);
         await newDog.save();
 
         res.status(201).json({

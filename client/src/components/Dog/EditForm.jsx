@@ -1,188 +1,115 @@
-import React, {useState} from 'react'
-import './AddDog.css'
-import ImageCropper from './ImageCropper'
-import getCroppedImg from './getCroppedImg'
+import React, {useState, useEffect}  from 'react'
+import {useParams} from 'react-router-dom'
+import './EditForm.css'
 import {TextField, MenuItem, InputAdornment, Radio, RadioGroup, FormControl, FormControlLabel, FormLabel, Button} from '@mui/material'
 
 
-function AddDog() {
-    const [dogData, setDogData] = useState({
-        name: '',
-        age: '',
-        bio: '',
-        gender: '',
-        weight: '',
-        energyLevel: '',
-        goodwDog: '',
-        goodwCat: '',
-        goodwKid: '',
-        crateTrained: '',
-        houseTrained: '',
-        objAggression: '',
-        objAggressionDesc: '',
-        specialNeeds: '',
-        specialNeedsDesc: '',
-        medication: '',
-        caseworker: '',
-        adoptionStatus: '',
-        sponsorshipStatus: '',
-        intakeType: '',
-        intakeDate: '',
-        adoptionFee: '',
-        image: null,
-        croppedImage: null,
+
+function EditForm({selectedDog, handleUpdate}) {
+
+    const {dogId} = useParams();
+    const [editedDog, setEditedDog] = useState({
+        adoptionStatus: 'available',
+        energyLevel: 'Low',
+        intakeDate: new Date().toISOString().substring(0,10) // set today's date as default value
+        
     })
 
-    // define states for handling image cropping
-    const [crop, setCrop] = useState({ x: 0, y: 0 })
-    const [zoom, setZoom] = useState(1);
-    const [croppedImage, setCroppedImage] = useState(null);
-
-    // Function to update the crop state when the user modifies the crop area
-    const onCropChange = (crop) => {
-        setCrop(crop);
-    };
-
-    // function updates zoom state when user modifies zoom levels
-    const onZoomChange = (zoom) => {
-        setZoom(zoom);
-    };
-
-    // function handles changes to form fields and updates dogData
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setDogData((prevDogData) => ({
-            ...prevDogData,
-            [name]: value,
-        }));
-        };
-
-    // handles the image upload and updates dogData
-    const handleImageChange = (e) => {
-        setDogData({
-            ...dogData,
-            image: e.target.files[0],
-        });
-    };
-
-    // Function to handle the completion of image cropping and set the croppedImage state
-    const handleCropComplete = async (croppedArea, croppedAreaPixels) => {
-        const croppedImageBlob = await getCroppedImg(dogData.image, croppedAreaPixels);
-        const reader = new FileReader();
-        reader.readAsDataURL(croppedImageBlob);
-        reader.onloadend = () => {
-            //const croppedImageBase64 = reader.result;
-            //console.log('Cropped Image Base64:', croppedImageBase64); // Add this console log to check the cropped image data
-            setDogData((prevDogData) => ({
-            ...prevDogData,
-            croppedImage: reader.result,
-            }));
-        };
-        };
-
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        const url = 'http://127.0.0.1:4000/dog/create'
-
-        const formData = new FormData();
-        formData.append('name', dogData.name);
-        formData.append('age', dogData.age);
-        formData.append('bio', dogData.bio);
-        formData.append('gender', dogData.gender);
-        formData.append('weight', dogData.weight);
-        formData.append('energyLevel', dogData.energyLevel)
-        formData.append('goodwDog', dogData.goodwDog)
-        formData.append('goodwCat', dogData.goodwCat)
-        formData.append('goodwKid', dogData.goodwKid)
-        formData.append('crateTrained', dogData.crateTrained)
-        formData.append('houseTrained', dogData.houseTrained)
-        formData.append('objAggression', dogData.objAggression)
-        formData.append('objAggressionDesc', dogData.objAggressionDesc)
-        formData.append('specialNeeds', dogData.specialNeeds)
-        formData.append('specialNeedsDesc', dogData.specialNeedsDesc)
-        formData.append('medication', dogData.medication)
-        formData.append('caseworker', dogData.caseworker)
-        formData.append('adoptionStatus', dogData.adoptionStatus)
-        formData.append('sponsorshipStatus', dogData.sponsorshipStatus)
-        formData.append('intakeType', dogData.intakeType)
-        formData.append('intakeDate', dogData.intakeDate)
-        formData.append('adoptionFee', dogData.adoptionFee)
-        formData.append('image', dogData.image);
-        formData.append('croppedImage', dogData.croppedImage)
-
-
-        try{
-            const response = await fetch(url, {
-                method: 'POST',
-                body: formData
-            });
-
-            if(!response.ok){
-                alert("Error Occured. Dog not added to database")
-            } else {
-                alert('Dog Addedd Successfully')}
-        } catch (err) {
+    useEffect(() => {
+        let url = `http://127.0.0.1:4000/dog/${dogId}`
+        fetch(url, {
+            method: 'GET',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                // "authorization": sessionToken
+        }),
+    })
+        .then(res => res.json())
+        .then(data => {
+            setEditedDog(data)
+            console.log(data.intakeDate)
+        })
+        .catch(err => {
             console.log(err)
-        }
+        })
+    },[dogId])
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setEditedDog((prevDog)=> ({...prevDog, [name]: value}))
     }
-    
-    function renderFormInputs() {
 
-        const genderOptions = [
-            {value: 'Male', label: 'Male'},
-            {value: 'Female', label: 'Female'}
-        ]
+    const handleSubmit = (e) => {
+        e.preventDefault()
 
-        const energyOptions= [
-            {value: 'Low', label: 'Low'},
-            {value: 'Medium', label: 'Medium'},
-            {value: 'High', label: 'High'}
-        ]
+        let url = `https://127.0.0.1:4000/dog/update/${dogId}`
+        fetch (url, {
+            method: 'PUT',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                // "authorization": sessionToken
+            }),
+            body: JSON.stringify(editedDog)
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
 
-        const trueFalseOptions= [
-            {value: 'true', label: 'Yes'},
-            {value: 'false', label: 'No'}
-            
-        ]
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
 
-        const adoptionOptions = [
-            {value: 'available', label: "Available For Adoption"},
-            {value:'pending', label:'Pending Adoption'},
-            {value:'adopted', label:'Adopted'}
-        ]
+    const genderOptions = [
+        {value: 'Male', label: 'Male'},
+        {value: 'Female', label: 'Female'}
+    ]
 
-        const sponsorshipOptions = [
-            {value:'true', label:'Sponsored'},
-            {value:'false', label:'Not Sponsored'}
-        ]
+    const energyOptions= [
+        {value: 'Low', label: 'Low'},
+        {value: 'Medium', label: 'Medium'},
+        {value: 'High', label: 'High'}
+    ]
 
-        return (
-            <form id="add-dog-form" onSubmit={handleSubmit}>
-            
-            <h3 className='form-header'>Please Enter All Necessary Information</h3>
-            <h4 className='form-header'> Note: once the form is submitted the dog will be added to the site for adoption</h4>
+    const trueFalseOptions= [
+        {value: 'true', label: 'Yes'},
+        {value: 'false', label: 'No'}
+        
+    ]
 
-            <h4 className='form-header'>GENERAL DETAILS</h4>
-            <TextField
-                className='form-input'
-                type="text"
-                name ='name'
-                label="Name"
-                size="small"
-                required
-                value={dogData.name}
-                onChange={handleChange}
+    const adoptionOptions = [
+        {value: 'available', label: "Available For Adoption"},
+        {value:'pending', label:'Pending Adoption'},
+        {value:'adopted', label:'Adopted'}
+    ]
+
+    const sponsorshipOptions = [
+        {value:'true', label:'Sponsored'},
+        {value:'false', label:'Not Sponsored'}
+    ]
+
+
+    return (
+        <>
+        <form id='edit-dog-form' onSubmit={handleSubmit}>
+        <TextField
+            className='form-input'
+            helperText="Name"
+            name="name"
+            value={editedDog.name}
+            onChange={handleChange}
+            required
             />
 
             <TextField
                 className='form-input'
                 type="number"
                 name = 'age'
-                label="Age"
+                helperText="Age"
                 size='small'
                 required
-                value={dogData.age}
+                value={editedDog.age}
                 onChange={handleChange}
             />
             
@@ -190,24 +117,24 @@ function AddDog() {
                 className='form-input'
                 type="text"
                 name='bio'
-                label="Bio"
+                helperText="Bio"
                 style={{width:600}}
                 required
                 multiline
                 size='large'
-                value={dogData.bio}
+                value={editedDog.bio}
                 onChange={handleChange}
             />
 
             <TextField
                 select
                 className='form-input'
-                label="Gender"
+                helperText="Gender"
                 name='gender'
                 style={{width:223}}
                 size='small'
                 required
-                value={dogData.gender}
+                value={editedDog.gender === 'Female' ? 'Female' : 'Male'}
                 onChange={handleChange}
                 >
                 {genderOptions.map((option) => (
@@ -220,11 +147,11 @@ function AddDog() {
             <TextField
                 className='form-input'
                 name="weight"
-                label="Weight"
+                helperText="Weight"
                 size='small'
                 required
                 style={{width:223}}
-                value={dogData.weight}
+                value={editedDog.weight}
                 onChange={handleChange}
                 InputProps={{
                     endAdornment: <InputAdornment position="end">lbs</InputAdornment>
@@ -236,8 +163,8 @@ function AddDog() {
                 className='form-input'
                 type="text"
                 name="energyLevel"
-                label="Energy Level"
-                value={dogData.energyLevel}
+                helperText="Energy Level"
+                value={editedDog.energyLevel}
                 onChange={handleChange}
                 style={{width:223}}
                 size='small'
@@ -258,7 +185,7 @@ function AddDog() {
                     required
                     className='form-dropdown'
                     name="goodwDog"
-                    value={dogData.goodwDog}
+                    value={editedDog.goodwDog ? 'true' : 'false'}
                     onChange={handleChange}
                 >
                 {trueFalseOptions.map((option) => (
@@ -279,7 +206,7 @@ function AddDog() {
                     required
                     className='form-dropdown'
                     name="goodwCat"
-                    value={dogData.goodwCat}
+                    value={editedDog.goodwCat ? 'true' : 'false'}
                     onChange={handleChange}
                 >
                 {trueFalseOptions.map((option) => (
@@ -300,7 +227,7 @@ function AddDog() {
                     required
                     className='form-dropdown'
                     name="goodwKid"
-                    value={dogData.goodwKid}
+                    value={editedDog.goodwKid ? 'true' : 'false'}
                     onChange={handleChange}
                 >
                 {trueFalseOptions.map((option) => (
@@ -321,7 +248,7 @@ function AddDog() {
                     required
                     className='form-dropdown'
                     name="crateTrained"
-                    value={dogData.crateTrained}
+                    value={editedDog.crateTrained ? 'true' : 'false'}
                     onChange={handleChange}
                 >
                 {trueFalseOptions.map((option) => (
@@ -342,7 +269,7 @@ function AddDog() {
                     required
                     className='form-dropdown'
                     name="houseTrained"
-                    value={dogData.houseTrained}
+                    value={editedDog.houseTrained ? 'true' : 'false'}
                     onChange={handleChange}
                 >
                 {trueFalseOptions.map((option) => (
@@ -363,7 +290,7 @@ function AddDog() {
                     required
                     className='form-dropdown'
                     name="objAggression"
-                    value={dogData.objAggression}
+                    value={editedDog.objAggression ? 'true' : 'false'}
                     onChange={handleChange}
                 >
                 {trueFalseOptions.map((option) => (
@@ -381,11 +308,10 @@ function AddDog() {
                 className='form-input'
                 type="text"
                 name='objAggressionDesc'
-                label="Object Aggression.."
                 multiline
                 helperText='Does the dog have object aggression? If yes, please explain.'
                 size='small'
-                value={dogData.objAggressionDesc}
+                value={editedDog.objAggressionDesc}
                 onChange={handleChange}
             />
 
@@ -396,7 +322,7 @@ function AddDog() {
                     required
                     className='form-dropdown'
                     name="specialNeeds"
-                    value={dogData.specialNeeds}
+                    value={editedDog.specialNeeds ? 'true' : 'false'}
                     onChange={handleChange}
                 >
                 {trueFalseOptions.map((option) => (
@@ -414,11 +340,10 @@ function AddDog() {
                 className='form-input'
                 type="text"
                 name='specialNeedsDesc'
-                label="Special Needs.."
                 multiline
                 helperText='Does the dog have special needs? If yes, please explain.'
                 size='small'
-                value={dogData.specialNeedsDesc}
+                value={editedDog.specialNeedsDesc}
                 style={{width:375}}
                 onChange={handleChange}
             />
@@ -427,11 +352,10 @@ function AddDog() {
                 className='form-input'
                 type="text"
                 name='medication'
-                label="Medication"
                 multiline
                 helperText='List all relevant medication dog is taking or will need to take.'
                 size='small'
-                value={dogData.medication}
+                value={editedDog.medication}
                 onChange={handleChange}
             />
 
@@ -440,9 +364,9 @@ function AddDog() {
                 className='form-input'
                 type="text"
                 name='caseworker'
-                label="Caseworker Name"
+                helperText="Caseworker Name"
                 size='small'
-                value={dogData.caseworker}
+                value={editedDog.caseworker}
                 required
                 onChange={handleChange}
             />
@@ -450,12 +374,12 @@ function AddDog() {
             <TextField
                 select
                 className='form-input'
-                label="Adoption Status"
+                helperText="Adoption Status"
                 name='adoptionStatus'
                 style={{width:223}}
                 size='small'
                 required
-                value={dogData.adoptionStatus}
+                value={editedDog.adoptionStatus}
                 onChange={handleChange}
                 >
                 {adoptionOptions.map((option) => (
@@ -468,12 +392,12 @@ function AddDog() {
             <TextField
                 select
                 className='form-input'
-                label="Sponsorship Status"
+                helperText="Sponsorship Status"
                 name='sponsorshipStatus'
                 style={{width:223}}
                 size='small'
                 required
-                value={dogData.sponsorshipStatus}
+                value={editedDog.sponsorshipStatus === 'Sponsored' ? 'true' : 'false' }
                 onChange={handleChange}
                 >
                 {sponsorshipOptions.map((option) => (
@@ -487,75 +411,55 @@ function AddDog() {
                 className='form-input'
                 type="text"
                 name='intakeType'
-                label="Intake Type"
+                helperText="Intake Type"
                 size='small'
-                value={dogData.intakeType}
+                value={editedDog.intakeType}
                 required
                 onChange={handleChange}
             />  
 
-            <TextField
+            {/* <TextField
                 className='form-input'
                 type="date"
                 name='intakeDate'
-                value={dogData.intakeDate}
+                value={editedDog.intakeDate}
                 required
                 helperText="Intake Date"
                 onChange={handleChange}
-            />
+            /> */}
 
             <TextField
                 className='form-input'
                 name="adoptionFee"
-                label="Adoption Fee"
+                helperText="Adoption Fee"
                 size='small'
                 required
                 style={{width:223}}
-                value={dogData.adoptionFee}
+                value={editedDog.adoptionFee}
                 onChange={handleChange}
                 InputProps={{
                     startAdornment: <InputAdornment position="start">$</InputAdornment>
                 }}
             />
 
-            <TextField
+            {/* <TextField
                 className='form-input'
                 id='image-input'
                 type="file"
                 name="image"
                 helperText='Image Upload'
-                onChange={handleImageChange}
-            />
+                //onChange={handleImageChange}
+            /> */}
 
-        {dogData.image && (
-            <ImageCropper
-                image={dogData.image}
-                crop={crop}
-                zoom={zoom}
-                onCropChange={onCropChange}
-                onZoomChange={onZoomChange}
-                onCropComplete={handleCropComplete}
-            />
-            )}
 
-        <Button 
-            id="add-dog-btn"
-            type="submit"
-            variant='contained'
-            >Submit</Button>
+            <Button type="submit" variant="contained">
+            Update
+            </Button>
+
         </form>
-        )
-        
-    }
-
-
-    return (
-    <>
-    {renderFormInputs()}
-
-    </>
-
+        </>
     )
-    }
+}
 
-export default AddDog;
+
+export default EditForm
