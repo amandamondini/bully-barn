@@ -175,6 +175,7 @@ function Dog() {
                                     Adoption Fee{" "}
                                     <span>{selectedDog.adoptionFee}</span>
                                 </h4>
+                                <Form />
                             </section>
                         </div>
                     </div>

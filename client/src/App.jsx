@@ -6,11 +6,8 @@ import Dog from "./components/Dog/Dog";
 import Nav from "./components/Nav/Nav";
 import ForgotPwd from "./components/Auth/ForgotPwd";
 import ResetPwd from "./components/Auth/ResetPwd";
-import Form from "./components/Form/Form";
 import AdminDash from "./components/Admin-Dash/Admin-Dash";
-import AdoptionFeePage from "./components/Adoption-Fee/AdoptionFee";
 import AddDog from "./components/Dog/AddDog";
-import PaymentStatusPage from "./components/Adoption-Fee/PaymentStatusPage";
 import Footer from "./components/Nav/Footer";
 import EditForm from "./components/Dog/EditForm";
 
@@ -40,11 +37,6 @@ function App() {
                 <Route path="/" element={renderNav(Dog)} />
                 <Route path="/admin" element={<AdminDash />} />
                 <Route path="/auth" element={renderFooter(Auth)} />
-                <Route
-                    path="/adoption-fee"
-                    element={renderFooter(AdoptionFeePage)}
-                />
-                {/* <Route path="/payment-status" element={<PaymentStatusPage />} /> */}
                 <Route
                     path="/forgot-password"
                     element={renderFooter(ForgotPwd)}
