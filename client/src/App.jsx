@@ -29,8 +29,6 @@ function App() {
             <Routes>
                 <Route path="/" element={renderNav(Dog)} />
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/adoption-fee" element={<AdoptionFeePage />} />
-                {/* <Route path="/payment-status" element={<PaymentStatusPage />} /> */}
                 <Route path="/forgot-password" element={<ForgotPwd />} />
                 <Route path="/add-dog" element={<AddDog />} />
                 <Route path="/reset-password/:token" element={<ResetPwd />} />
