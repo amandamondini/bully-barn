@@ -63,6 +63,7 @@
     cursor: pointer;
 }
 
+<<<<<<< HEAD
 /* Display One Dog - Code */
 
 #one-dog-container {
@@ -160,6 +161,8 @@
     font-size: 14px;
 }
 
+=======
+>>>>>>> 1da8113f713b64bea86c967340e17caee972d7bd
 #chip-box {
     display: flex;
     align-items: center;

@@ -22,7 +22,14 @@ const upload = multer({
     limits: {
         fileSize: 4 * 1024 * 1024, //4MB
     },
-});
+}) ;
+
+//POST a new dog 
+router.post("/create", upload.single('image'), async (req,res) => {
+    try{
+        const imageBuffer = req.file.buffer.toString("base64")
+        const croppedImageBase64 = req.body.croppedImage;
+        const {name, age, bio, gender, weight, energyLevel, goodwDog, goodwCat, goodwKid, crateTrained, houseTrained, objAggression, objAggressionDesc, specialNeeds, specialNeedsDesc, medication, caseworker, adoptionStatus, sponsorshipStatus, intakeType, intakeDate, adoptionFee} = req.body
 
 //POST a new dog
 router.post("/create", upload.single("image"), async (req, res) => {

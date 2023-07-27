@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import Auth from "./components/Auth/Auth";
@@ -10,6 +9,7 @@ import AdminDash from "./components/Admin-Dash/Admin-Dash";
 import AddDog from "./components/Dog/AddDog";
 import Footer from "./components/Nav/Footer";
 import EditForm from "./components/Dog/EditForm";
+import DisplayOne from "./components/Dog/DisplayOne";
 
 const renderNav = (Component) => {
     return (
@@ -19,6 +19,13 @@ const renderNav = (Component) => {
             <Footer />
         </>
     );
+  return (
+    <>
+      <Nav />
+      <Component />
+      <Footer />
+    </>
+  );
 };
 
 const renderFooter = (Component) => {
@@ -29,13 +36,20 @@ const renderFooter = (Component) => {
         </>
     );
 };
+  return (
+    <>
+      <Component />
+      <Footer />
+    </>
+  )
+}
 
 function App() {
     return (
         <Router>
+            <Nav />
             <Routes>
                 <Route path="/" element={renderNav(Dog)} />
-                <Route path="/admin" element={<AdminDash />} />
                 <Route path="/auth" element={renderFooter(Auth)} />
                 <Route
                     path="/forgot-password"
@@ -47,7 +61,9 @@ function App() {
                     element={renderFooter(ResetPwd)}
                 />
                 <Route path="/edit-form/:dogId" element={<EditForm />} />
+                <Route path="/display-one" element={<DisplayOne />} />
             </Routes>
+            <Footer />
         </Router>
     );
 }
