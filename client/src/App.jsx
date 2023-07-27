@@ -5,6 +5,7 @@ import Dog from "./components/Dog/Dog";
 import Nav from "./components/Nav/Nav";
 import ForgotPwd from "./components/Auth/ForgotPwd";
 import ResetPwd from "./components/Auth/ResetPwd";
+import Form from "./components/Form/Form";
 import AdminDash from "./components/Admin-Dash/Admin-Dash";
 import AddDog from "./components/Dog/AddDog";
 import Footer from "./components/Nav/Footer";
@@ -19,13 +20,6 @@ const renderNav = (Component) => {
             <Footer />
         </>
     );
-  return (
-    <>
-      <Nav />
-      <Component />
-      <Footer />
-    </>
-  );
 };
 
 const renderFooter = (Component) => {
@@ -36,13 +30,6 @@ const renderFooter = (Component) => {
         </>
     );
 };
-  return (
-    <>
-      <Component />
-      <Footer />
-    </>
-  )
-}
 
 function App() {
     return (
@@ -51,6 +38,7 @@ function App() {
             <Routes>
                 <Route path="/" element={renderNav(Dog)} />
                 <Route path="/auth" element={renderFooter(Auth)} />
+                <Route path="/admin" element={<AdminDash />} />
                 <Route
                     path="/forgot-password"
                     element={renderFooter(ForgotPwd)}
