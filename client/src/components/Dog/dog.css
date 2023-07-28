@@ -1,200 +1,98 @@
-#welcome-msg {
+.welcome-msg {
     text-align: center;
-    margin: 1.8em 0 1em 0;
-    font-size: 3em;
-}
-
-#contain-home {
+    margin: 1.5em 0 1em 0;
+    font-size: 3.2em;
+  }
+  
+  .contain-home {
     margin-top: 0;
-}
-
-#dog-container {
+  }
+  
+  .dog-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    max-width: 70em;
+    max-width: 80em;
     margin: 0 auto;
     position: relative;
-}
-
-#dog-card {
+  }
+  
+  .dog-card {
     text-align: center;
-    width: 15em;
+    width: 17em;
     padding: 0;
     margin: 1em;
     border-radius: 1em;
     position: relative;
     transition: box-shadow 0.3s ease-in-out;
-}
-
-#dog-card:hover {
+  }
+  
+  .dog-card:hover {
     box-shadow: 0 0 10px 5px rgba(0, 0, 255, 0.41);
-}
-
-#dog-card #dog-details {
+  }
+  
+  .dog-card .dog-details {
     color: white;
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.8);;
     padding: 1em;
-    border-radius: 0.8em;
-}
-
-#dog-card h2 {
-    margin-bottom: 0.15em;
-}
-
-#dog-card #img-container {
+    border-radius: .8em;
+  }
+  
+  .dog-card h2 {
+    margin-bottom: .15em;
+  }
+  
+  .dog-card .img-container {
     height: 18em;
     overflow: hidden;
-    border-radius: 0.8em;
-}
-
-#dog-card img {
+    border-radius: .8em;
+  }
+  
+  .dog-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-#dog-card p span {
+  }
+  
+  .dog-card p span {
     margin-right: 10px;
     cursor: pointer;
-}
-
-<<<<<<< HEAD
-/* Display One Dog - Code */
-
-#one-dog-container {
-    width: 60vw;
-}
-
-#dog-details-container {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    height: 100vh;
-    background-color: #f7f3e3;
-    border-radius: 20px;
-    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, 0.2);
-}
-
-#back-to-all-dogs-btn {
-    margin: 2em;
-    text-align: left;
-    border-radius: 3px;
-    padding: 6px 15px 6px 15px;
-    cursor: pointer;
-    font-size: larger;
-    margin-bottom: 5em;
-    background-color: transparent;
-    background-image: linear-gradient(to bottom, #fff, #f8eedb);
-    border: 0 solid #e5e7eb;
-    border-radius: 6px;
-    box-sizing: border-box;
-    color: #151515;
-    cursor: pointer;
-    font-weight: 600;
-    outline: 2px solid transparent;
-    padding: 1rem 1.5rem;
-    text-align: center;
-    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-    touch-action: manipulation;
-    box-shadow: -6px 8px 10px rgba(81, 41, 10, 0.1),
-        0px 2px 2px rgba(81, 41, 10, 0.2);
-}
-
-#back-to-all-dogs-btn:hover {
-    box-shadow: rgba(72, 35, 7, 0.46) 0 0 0 4px,
-        -6px 8px 10px rgba(81, 41, 10, 0.1), 0px 2px 2px rgba(81, 41, 10, 0.2);
-}
-
-#img-dog-container img {
-    width: 22em;
-    height: 25em;
-    object-fit: cover;
-    border-radius: 1em;
-}
-
-#img-dog-container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    padding: 2em;
-}
-
-#dog-details {
-    width: 100%;
-    background-color: #f7f3e3;
-    padding: 4em;
-    border-radius: 0.5em;
-    margin-top: 2em;
-}
-
-#dog-details h1 {
-    font-family: "Comfortaa", cursive;
-    font-size: 3em;
-}
-
-#basic-info {
-    display: flex;
-    gap: 1em;
-    color: #b3b6b7;
-    font-family: "Comfortaa", cursive;
-    font-size: larger;
-    font-weight: 600;
-    margin-bottom: 2em;
-}
-
-#dog-gender {
-    display: flex;
-    align-items: center;
-}
-
-#dog-details h4 {
-    margin-top: 1em;
-}
-
-#one-dog-container span {
-    font-family: "Comfortaa", cursive;
-    font-size: 14px;
-}
-
-=======
->>>>>>> 1da8113f713b64bea86c967340e17caee972d7bd
-#chip-box {
+  }
+  
+  #chip-box {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-}
-
-#chip-box .MuiFormControlLabel-root {
+  }
+  
+  #chip-box .MuiFormControlLabel-root {
     font-size: 0.8rem;
     margin: 0;
-}
-
-#chip-box .MuiCheckbox-root {
+  }
+  
+  #chip-box .MuiCheckbox-root {
     color: black;
-}
-
-#chip-box .MuiButtonBase-root {
+  }
+  
+  #chip-box .MuiButtonBase-root {
     color: #000;
     margin: 0;
-}
-
-.filter-label {
+  }
+  
+  .filter-label {
     display: flex;
     align-items: center;
     justify-content: start;
     font-weight: bold;
     padding-left: 2em;
-}
-
-#head-sponsored-card,
-#head-adopted-card,
-#head-pending-card {
-    background-color: #33cccc;
+  }
+  
+  .head-sponsored-card, .head-adopted-card, .head-pending-card {
+    background-color: #33CCCC;
     position: absolute;
     top: 0;
     left: 0;
@@ -203,32 +101,30 @@
     overflow: hidden;
     color: #fff;
     height: auto;
-    border-top-left-radius: 0.6em;
-    border-top-right-radius: 0.6em;
-    padding: 0.2em;
+    border-top-left-radius: .6em;
+    border-top-right-radius: .6em;
+    padding: .2em;
     object-fit: cover;
-}
-
-.sponsored-card,
-.pending-card,
-.adopted-card {
+  }
+  
+  
+  .sponsored-card, .pending-card, .adopted-card {
     border: solid 4px #2fbcbc;
-}
-
-.pending-card,
-#head-pending-card {
+  }
+  
+  .pending-card, .head-pending-card {
     border-color: #b8b8ff;
     color: #383838;
-    background-color: #e6e6fa;
-}
-
-.adopted-card,
-#head-adopted-card {
-    border-color: rgba(74, 93, 94, 0.863);
+    background-color: #E6E6FA;
+  }
+  
+  
+  .adopted-card, .head-adopted-card {
+    border-color: rgba(74, 93, 94, 0.863) ;
     background-color: rgba(74, 93, 94, 0.863);
-}
-
-.attr-label {
-    color: #007bff;
+  }
+  
+  .attr-label {
+    color: #27acac;
     margin-right: 1.2em;
-}
+  }
