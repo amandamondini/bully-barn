@@ -3,6 +3,7 @@ import './AddDog.css'
 import ImageCropper from './ImageCropper'
 import getCroppedImg from './getCroppedImg'
 import {TextField, MenuItem, InputAdornment, Radio, RadioGroup, FormControl, FormControlLabel, FormLabel, Button} from '@mui/material'
+import DrawerNav from '../Admin-Dash/DrawerNav'
 
 
 function AddDog() {
@@ -39,7 +40,7 @@ function AddDog() {
     const [croppedImage, setCroppedImage] = useState(null);
     const [finishedCrop, setFinishedCrop] = useState(false)
     const [multipleImages, setMultipleImages] = useState([])
- 
+
     // Function to update the crop state when the user modifies the crop area
     const onCropChange = (crop) => {
         setCrop(crop);
@@ -143,7 +144,7 @@ function AddDog() {
     }
     
     function renderFormInputs() {
-//#region 
+
         const genderOptions = [
             {value: 'Male', label: 'Male'},
             {value: 'Female', label: 'Female'}
@@ -532,7 +533,7 @@ function AddDog() {
                     startAdornment: <InputAdornment position="start">$</InputAdornment>
                 }}
             />
-//#endregion
+
             <TextField
                 className='form-input'
                 id='image-input'
@@ -581,6 +582,7 @@ function AddDog() {
 
     return (
     <>
+    <DrawerNav />
     {renderFormInputs()}
 
     </>

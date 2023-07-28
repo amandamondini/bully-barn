@@ -17,6 +17,7 @@ import PaymentStatusPage from "./components/Dog/PaymentStatusPage";
 import SuccessPage from "./components/Dog/SuccessPage";
 import CanceledPage from "./components/Dog/CanceledPage";
 
+
 const renderNav = (Component) => {
     return (
         <>
@@ -37,29 +38,24 @@ const renderFooter = (Component) => {
 };
 
 function App() {
-    return (
-        <Router>
-            <Routes>
-                <Route path="/" element={renderNav(Dog)} />
-                <Route path="/auth" element={renderFooter(Auth)} />
-                <Route
-                    path="/forgot-password"
-                    element={renderFooter(ForgotPwd)}
-                />
-                <Route path="/add-dog" element={renderNav(AddDog)} />
-                <Route
-                    path="/reset-password/:token"
-                    element={renderFooter(ResetPwd)}
-                />
-                <Route path="/edit-form/:dogId" element={<EditForm />} />
-                <Route path="/display-one" element={renderNav(DisplayOne)} />
-                <Route path="/adopted-dogs" element={renderNav(AdoptedDogs)} />
-                <Route path="/chart" element={renderNav(Chart)} />
-                <Route path="/payment-status" element={<PaymentStatusPage />} />
-                <Route path="/admin-dash" element={<AdminDash />} />
-            </Routes>
-        </Router>
-    );
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={renderNav(Dog)} />
+        <Route path="/auth" element={renderFooter(Auth)} />
+        <Route path="/forgot-password" element={renderFooter(ForgotPwd)} />
+        <Route path="/add-dog" element={renderNav(AddDog)} />
+        <Route path="/reset-password/:token" element={renderFooter(ResetPwd)} />
+        <Route path="/edit-form/:dogId" element={<EditForm />} />
+        <Route path="/display-one" element={renderNav(DisplayOne)} />
+        <Route path="/adopted-dogs" element={renderNav(AdoptedDogs)} />
+        <Route path ="/chart" element={renderNav(Chart)} />
+        <Route path="/payment-status" element={<PaymentStatusPage />} />
+        <Route path="/admin-dash" element={<AdminDash />} />
+
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
