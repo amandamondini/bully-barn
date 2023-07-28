@@ -45,6 +45,17 @@ const ApplicationsTable = () => {
                 return sortOrder === "asc"
                     ? valueA.localeCompare(valueB)
                     : valueB.localeCompare(valueA);
+            } else if (column === "dogName") {
+                const dogA = findDogById(a.petPreferences.dogId);
+                const dogB = findDogById(b.petPreferences.dogId);
+
+                if (!dogA || !dogB) return 0;
+
+                const valueA = dogA.name.toLowerCase();
+                const valueB = dogB.name.toLowerCase();
+                return sortOrder === "asc"
+                    ? valueA.localeCompare(valueB)
+                    : valueB.localeCompare(valueA);
             } else {
                 const dogA = findDogById(a.petPreferences.dogId);
                 const dogB = findDogById(b.petPreferences.dogId);
@@ -110,6 +121,12 @@ const ApplicationsTable = () => {
         setApplications(filteredApps);
     };
 
+    // New function to get the dog's name based on dogId
+    const getDogName = (dogId) => {
+        const dog = findDogById(dogId);
+        return dog ? dog.name : "N/A";
+    };
+
     return (
         <div>
             <h2>Applications List</h2>
@@ -140,6 +157,12 @@ const ApplicationsTable = () => {
                             className="header-cell"
                         >
                             Case Worker {getSortArrow("caseWorker")}
+                        </th>
+                        <th
+                            onClick={() => sortApplicationsByColumn("dogName")}
+                            className="header-cell"
+                        >
+                            Dog's Name {getSortArrow("dogName")}
                         </th>
                         <th
                             onClick={() =>
@@ -181,9 +204,14 @@ const ApplicationsTable = () => {
                                 <td>
                                     {application.personalInformation.fullName}
                                 </td>
+                                <td>{dog ? dog.caseworker : "N/A"}</td>
+                                <td>
+                                    {getDogName(
+                                        application.petPreferences.dogId
+                                    )}
+                                </td>
                                 {dog ? (
                                     <>
-                                        <td>{dog.caseworker}</td>
                                         <td>{dog.adoptionStatus}</td>
                                         <td>
                                             {dog.sponsorshipStatus
@@ -192,7 +220,7 @@ const ApplicationsTable = () => {
                                         </td>
                                     </>
                                 ) : (
-                                    <td colSpan="3">
+                                    <td colSpan="2">
                                         No information available
                                     </td>
                                 )}
