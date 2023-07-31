@@ -4,7 +4,7 @@ import {TextField, Button, InputAdornment, Paper} from '@mui/material'
 import FeedIcon from '@mui/icons-material/Feed'
 
 
-const Form = ({ selectedDog }) => {
+const Form = ({ selectedDog, isLoggedIn }) => {
     const dogId = selectedDog._id
     console.log(selectedDog)
     const [showForm, setShowForm] = useState(false)
