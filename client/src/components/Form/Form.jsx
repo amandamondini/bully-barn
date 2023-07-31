@@ -267,7 +267,6 @@ const Form = ({ selectedDog }) => {
                 }
             </Paper>
         }
-
         {showForm && displayApplicationForm()}
         </>
     );
